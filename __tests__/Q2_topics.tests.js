@@ -21,6 +21,11 @@ describe('Adds first endpoint /api/topics', ()=> {
         .get('/api/topics')
         .expect(200)
         .then((result) => {
+
+            console.log(result.body)
+
+            expect((result.body.topics)).toHaveLength(3)
+
             result.body.topics.forEach((topic)=>{
                 expect(topic).toHaveProperty('slug', expect.any((String)))
                 expect(topic).toHaveProperty('description', expect.any((String)))

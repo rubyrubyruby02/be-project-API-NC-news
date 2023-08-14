@@ -4,10 +4,12 @@ const format = require('pg-format')
 const fetchTopics = () => {
     return db.query('SELECT * FROM topics')
     .then((result)=> {
+
+        if(!result.rows.length === 0){
+            return Promise.reject(error)
+        }
+
         return result.rows
-    })
-    .catch((error)=> {
-        console.log(error, "error in model")
     })
 }
 
