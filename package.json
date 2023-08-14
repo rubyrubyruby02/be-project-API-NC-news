@@ -7,14 +7,15 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install", 
+    "sql": "psql -f ./db/sql_playground.sql>output.txt"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/northcoders/be-nc-news.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "", 
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/northcoders/be-nc-news/issues"
