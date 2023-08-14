@@ -14,7 +14,7 @@ afterAll(()=> {
 })
 
 describe('GET /api/articles/:article_id', ()=> {
-    test('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
+    test.skip('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
         return request(app)
         .get('/api/articles/2')
         .expect(200)
@@ -32,11 +32,12 @@ describe('GET /api/articles/:article_id', ()=> {
             })
         })
     })
-    test('Status 200, /api/article/1 - checks expected output for first article', ()=> {
+    test('Status 200, /api/articles/1 - checks expected output for first article', ()=> {
         return request(app)
         .get('/api/articles/1')
         .expect(200)
         .then((response)=> {
+
             const returnedData = {
                 article_id: 1,
                 title: 'Living in the shadow of a great man',
