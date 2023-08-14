@@ -1,3 +1,4 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+How to create the environement variables: add two .env files (env.test & env.development). Inside these files you will need to put your environement variable=database_name. 
+
