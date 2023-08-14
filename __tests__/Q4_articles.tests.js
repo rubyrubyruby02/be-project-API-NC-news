@@ -14,13 +14,13 @@ afterAll(()=> {
 })
 
 describe('GET /api/articles/:article_id', ()=> {
-    test.skip('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
+    test('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
         return request(app)
         .get('/api/articles/2')
         .expect(200)
-        .then((result) => {
+        .then((response) => {
 
-            result.body.article.forEach((article)=>{
+            response.body.article.forEach((article)=>{
                 expect(article).toHaveProperty('author', expect.any((String)))
                 expect(article).toHaveProperty('title', expect.any((String)))
                 expect(article).toHaveProperty('article_id', expect.any((Number)))
@@ -32,25 +32,23 @@ describe('GET /api/articles/:article_id', ()=> {
             })
         })
     })
-    test.skip('Status 200, /api/article/1 - checks expected output for first article', ()=> {
-
+    test('Status 200, /api/article/1 - checks expected output for first article', ()=> {
         return request(app)
-        .get('/api/article/1')
+        .get('/api/articles/1')
         .expect(200)
-        .then((result)=> {
-
+        .then((response)=> {
             const returnedData = {
                 article_id: 1,
-                title: "Running a Node App",
-                topic: "coding",
-                author: "jessjelly",
-                body: "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.", 
-                created_at: 2020-11-07 06:03:00,
-                votes: 0, 
-                article_img_url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
-            }
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                author: 'butter_bridge',
+                body: 'I find this existence challenging',
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 100,
+                article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+              }
 
-
+            expect(response.body).toEqual({result: returnedData})
             
         })
     })
