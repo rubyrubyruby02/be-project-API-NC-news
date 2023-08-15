@@ -13,6 +13,17 @@ const fetchArticle = (article_id)=> {
 
         return result.rows[0]
     })
+    .catch((error)=> {
+        if(error.code === '22P02'){
+            return Promise.reject({
+                status: 400,
+                msg: "Bad request"
+            })
+        }
+        else {
+            return Promise.reject(error)
+        }
+    })
 }
 
 module.exports = {fetchArticle}

@@ -55,12 +55,12 @@ describe('GET /api/articles/:article_id', ()=> {
             
         })
     })
-    test('Status 404: not found, custom message when path is invalid (e.g. article_id is input a a string)', ()=> {
+    test('Status 400: not found, custom message when path is invalid (e.g. article_id is input a a string)', ()=> {
         return request(app)
-        .get('/api/not_a_path/not_a_number')
-        .expect(404)
+        .get('/api/articles/not_a_number')
+        .expect(400)
         .then((response) => {
-            expect(response.body.msg).toBe("Not found")
+            expect(response.body.msg).toBe("Bad request")
         })
     })
     test('Status 404: a valid article_id is input but this artcile_id is not in the database', ()=> {
