@@ -157,7 +157,7 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
         .get('/api/articles')
         .expect(200)
         .then(({body : {articles}})=> {
-            console.log(articles, "in test file")
+
             expect(articles).toBeSortedBy('created_at', {descending: true})
         })
     })
@@ -165,22 +165,22 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
 
 
 
-describe.skip('Q7 POST request /api/articles/:article_id/comments ', ()=> {
+describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
     test('Status 201: returns user input', ()=> {
 
         const postInput = {
-            votes: 1,
-            author: 'Ruby',
-            body: 'Ruby adds a comment to article 1',
-            article_id: 1
+            "votes": 1,
+            "author": "Ruby",
+            "body":"Ruby adds a comment to article 1",
+            "article_id": 1
           }
 
 
         return request(app)
-        .post('/api/articles/:article_id/comments')
+        .post('/api/articles/1/comments')
+        .send(postInput)
         .expect(201)
         .then(({body}) => {
-
             expect(body).toEqual({new_comment : {
                 comment_id: 19,
                 votes: 1,
