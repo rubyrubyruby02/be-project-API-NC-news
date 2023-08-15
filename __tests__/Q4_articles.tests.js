@@ -13,7 +13,7 @@ afterAll(()=> {
    return db.end()
 })
 
-describe.only('GET /api/articles/:article_id', ()=> {
+describe('GET /api/articles/:article_id', ()=> {
     test('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
 
         return request(app)
