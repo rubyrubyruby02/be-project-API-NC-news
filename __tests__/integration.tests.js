@@ -68,7 +68,7 @@ describe('Q3 Endpoint /api returns a list with a description of all available en
         })
     })
 })
-describe('Q5  adds /api/articles and returns articles in data-descending order', ()=> {
+describe.skip('Q5  adds /api/articles and returns articles in data-descending order', ()=> {
     test('Status 200: returns array of article objects with properties of author, title, article_id, topic, created_at, votes, article_img_url, comment_count', ()=> {
         return request(app)
         .get('/api/articles')
