@@ -11,11 +11,7 @@ const fetchArticle = (article_id)=> {
                 msg: 'Article Id not found'
             })
         }
-
         return result.rows[0]
-    })
-    .catch((error) => {
-       return Promise.reject(error)
     })
 }
 
@@ -38,9 +34,6 @@ const fetchAllArticles = ()=> {
     .then((result)=> {
 
         return result.rows
-    })
-    .catch((error)=> {
-        return Promise.reject(error)
     })
 }
 

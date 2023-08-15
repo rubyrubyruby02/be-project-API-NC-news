@@ -44,6 +44,20 @@
         }
       ]
     }
-
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "returns an object with the comments for the chosen article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [{
+          "comment_id": 8,
+          "votes": 0,
+          "created_at": "2020-04-14T20:19:00.000Z",
+          "author": "icellusedkars",
+          "body": "Delicious crackerbreads",
+          "article_id": 1
+      }
+      ]
+    }
   }
 }
