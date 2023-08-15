@@ -13,23 +13,25 @@ afterAll(()=> {
    return db.end()
 })
 
-describe('GET /api/articles/:article_id', ()=> {
-    test.skip('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
+describe.only('GET /api/articles/:article_id', ()=> {
+    test('Status 200: returns article object with properties of author, title, article_id, body, topic, created_at, votes, article_img_url', ()=> {
+
         return request(app)
         .get('/api/articles/2')
         .expect(200)
         .then((response) => {
 
-            response.body.article.forEach((article)=>{
-                expect(article).toHaveProperty('author', expect.any((String)))
-                expect(article).toHaveProperty('title', expect.any((String)))
-                expect(article).toHaveProperty('article_id', expect.any((Number)))
-                expect(article).toHaveProperty('body', expect.any((String)))
-                expect(article).toHaveProperty('topic', expect.any((String)))
-                expect(article).toHaveProperty('created_at', expect.any((Date)))
-                expect(article).toHaveProperty('votes', expect.any((Number)))
-                expect(article).toHaveProperty('article_img_url', expect.any((String)))
-            })
+            const result = response.body.result
+
+                expect(result).toHaveProperty('author', expect.any((String)))
+                expect(result).toHaveProperty('title', expect.any((String)))
+                expect(result).toHaveProperty('article_id', expect.any((Number)))
+                expect(result).toHaveProperty('body', expect.any((String)))
+                expect(result).toHaveProperty('topic', expect.any((String)))
+                expect(result).toHaveProperty('created_at', expect.any((String)))
+                expect(result).toHaveProperty('votes', expect.any((Number)))
+                expect(result).toHaveProperty('article_img_url', expect.any((String)))
+            
         })
     })
     test('Status 200, /api/articles/1 - checks expected output for first article', ()=> {
@@ -51,6 +53,22 @@ describe('GET /api/articles/:article_id', ()=> {
 
             expect(response.body).toEqual({result: returnedData})
             
+        })
+    })
+    test('Status 404: not found, custom message when path is invalid (e.g. article_id is input a a string)', ()=> {
+        return request(app)
+        .get('/api/not_a_path/not_a_number')
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe("Not found")
+        })
+    })
+    test('Status 404: a valid article_id is input but this artcile_id is not in the database', ()=> {
+        return request(app)
+        .get('/api/articles/999')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Article Id not found")
         })
     })
 })
