@@ -1,5 +1,16 @@
-const customErrorHandler = ((error, request, response, next)=> {
-    
+const PSQLErrorHandler = ((error, request, response, next) => {
+
+    if(error.code === '22P02'){
+        response.status(400).send({
+            msg: 'Bad request'
+        })
+    }
+    else{
+        next(error)
+    }
+})
+
+const customErrorHandler = ((error, request, response, next) => {
     if(error.status && error.msg){
         response.status(error.status).send({ msg: error.msg})
     }
@@ -9,4 +20,4 @@ const customErrorHandler = ((error, request, response, next)=> {
 })
 
 
-module.exports = {customErrorHandler}
+module.exports = {customErrorHandler, PSQLErrorHandler}
