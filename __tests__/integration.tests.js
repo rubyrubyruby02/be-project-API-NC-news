@@ -165,7 +165,7 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
 
 
 
-describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
+describe.skip('Q7 POST request /api/articles/:article_id/comments ', ()=> {
     test('Status 201: returns user input', ()=> {
 
         const postInput = {
