@@ -1,6 +1,7 @@
 const db = require('../db/connection')
 
 const fetchArticle = (article_id)=> {
+
     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then((result)=> {
 
@@ -13,17 +14,36 @@ const fetchArticle = (article_id)=> {
 
         return result.rows[0]
     })
-    .catch((error)=> {
-        if(error.code === '22P02'){
-            return Promise.reject({
-                status: 400,
-                msg: "Bad request"
-            })
-        }
-        else {
-            return Promise.reject(error)
-        }
+    .catch((error) => {
+       return Promise.reject(error)
     })
 }
 
-module.exports = {fetchArticle}
+const fetchAllArticles = ()=> {
+
+    return db.query(`SELECT 
+    a.article_id,
+    COUNT(c.comment_id) comment_count,
+    a.author, 
+    a.title,  
+    a.topic, 
+    a.created_at, 
+    a.votes, 
+    a.article_img_url
+    FROM articles a 
+    INNER JOIN comments c 
+    ON a.article_id = c.article_id
+    GROUP BY a.article_id
+    ORDER BY a.created_at DESC;`)
+    .then((result)=> {
+
+        return result.rows
+    })
+    .catch((error)=> {
+        return Promise.reject(error)
+    })
+}
+
+
+
+module.exports = {fetchArticle, fetchAllArticles}
