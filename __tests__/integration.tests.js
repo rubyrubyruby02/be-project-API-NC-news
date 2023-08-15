@@ -35,6 +35,9 @@ describe('Q2 Generic 404 not found error for missing endpoints', ()=> {
         return request(app)
         .get('/api/wronginput')
         .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Not found")
+        })
     })
 })
 describe('Q3 Endpoint /api returns a list with a description of all available endpoints ', ()=> {
@@ -156,16 +159,6 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
         .then(({body : {articles}})=> {
             console.log(articles, "in test file")
             expect(articles).toBeSortedBy('created_at', {descending: true})
-        })
-    })
-    test('Status 404: incorrect endpoint input', ()=> {
-        return request(app)
-        .get('/api/wrong_input')
-        .expect(404)
-        .then((response)=> {
-
-            expect(response.body.msg).toBe("Not found")
-
         })
     })
 })
