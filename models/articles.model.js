@@ -11,6 +11,7 @@ const fetchArticle = (article_id)=> {
                 msg: 'Article Id not found'
             })
         }
+        
         return result.rows[0]
     })
 }

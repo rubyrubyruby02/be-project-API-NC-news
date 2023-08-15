@@ -167,6 +167,8 @@ describe('Q6 /api/articles/:article_id/comments', ()=> {
         .get('/api/articles/1/comments')
         .expect(200)
         .then((response)=> {
+            expect((response.body.comments)).toHaveLength(11)
+
             response.body.comments.forEach((comment)=> {
                 expect(comment).toHaveProperty('comment_id', expect.any((Number)))
                 expect(comment).toHaveProperty('votes', expect.any((Number)))
@@ -199,6 +201,14 @@ describe('Q6 /api/articles/:article_id/comments', ()=> {
         .expect(400)
         .then((response) => {
             expect(response.body.msg).toBe("Bad request")
+        })
+    })
+    test('Status 200 given a valid article ID but there are no comments for this article, returns an empty array', ()=> {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.comments).toEqual([])
         })
     })
 })
