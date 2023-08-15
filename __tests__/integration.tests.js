@@ -163,3 +163,35 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
     })
 })
 
+
+
+describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
+    test('Status 201: returns user input', ()=> {
+
+        const postInput = {
+            votes: 1,
+            author: 'Ruby',
+            body: 'Ruby adds a comment to article 1',
+            article_id: 1
+          }
+
+
+        return request(app)
+        .post('/api/articles/:article_id/comments')
+        .expect(201)
+        .then(({body}) => {
+
+            expect(body).toEqual({new_comment : {
+                comment_id: 19,
+                votes: 1,
+                author: 'Ruby',
+                created_at: "",
+                body: 'Ruby adds a comment to article 1',
+                article_id: 1
+
+            }})
+
+        })
+    })
+})
+
