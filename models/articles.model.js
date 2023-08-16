@@ -38,6 +38,22 @@ const fetchAllArticles = ()=> {
     })
 }
 
+const updateArticle = (article_id, inc_votes)=> {
 
+    console.log(article_id)
+    console.log(inc_votes)
 
-module.exports = {fetchArticle, fetchAllArticles}
+    const queryString = `UPDATE`
+
+    return db.query()
+    .then((result)=> {
+        return result.rows[0]
+    })
+    .catch((error)=> {
+        console.log(error)
+        return Promise.reject(error)
+    })
+
+}
+
+module.exports = {fetchArticle, fetchAllArticles, updateArticle}
