@@ -235,6 +235,27 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
             expect(newComment[0]).toHaveProperty('created_at', expect.any((String)))
         })
     })
+    test('Status 201: handles input with additional unneccesary properties', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body":"Ruby adds a comment to article 1",
+            "other": "other unnecessary input"
+        }
+
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(201)
+        .then((response)=> {
+            const newComment = response.body.new_comment
+            expect(newComment[0]).toHaveProperty('comment_id', expect.any((Number)))
+            expect(newComment[0]).toHaveProperty('body', expect.any((String)))
+            expect(newComment[0]).toHaveProperty('article_id', expect.any((Number)))
+            expect(newComment[0]).toHaveProperty('author', expect.any((String)))
+            expect(newComment[0]).toHaveProperty('votes', expect.any((Number)))
+            expect(newComment[0]).toHaveProperty('created_at', expect.any((String)))
+        })
+    })
     test('Status 404 : article_id is valid but does not exist', ()=> {
         const postInput = {
             "username": "butter_bridge",
@@ -269,6 +290,31 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
         .expect(400)
         .then((response)=> 
          expect(response.body.msg).toBe('Missing input'))
+
+    })
+    test('Status 400: user does not give all required fields in input - no username is provided', ()=> {
+        const postInput = {
+            "body": "here is a body with no username"
+          }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(400)
+        .then((response)=> 
+         expect(response.body.msg).toBe('Missing input'))
+
+    })
+    test('Status 400: article id given is not a number', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body": "hello this is a new comment"
+          }
+        return request(app)
+        .post('/api/articles/not_a_id_number/comments')
+        .send(postInput)
+        .expect(400)
+        .then((response)=> 
+         expect(response.body.msg).toBe('Bad request'))
 
     })
 })

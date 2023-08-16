@@ -4,6 +4,7 @@ const db = require('../db/connection')
 const insertNewComment = (article_id, newComment) => {
 
     const {username, body} = newComment
+
     const formattedValues = [body, username, parseInt(article_id)]
 
     return db.query(`INSERT INTO comments 
