@@ -165,16 +165,16 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
 
 
 
-describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
+describe.only('Q7 POST request /api/articles/:article_id/comments ', ()=> {
     test('Status 201: returns user input', ()=> {
 
+        //JSON object being input
         const postInput = {
             "votes": 1,
             "author": "Ruby",
             "body":"Ruby adds a comment to article 1",
             "article_id": 1
           }
-
 
         return request(app)
         .post('/api/articles/1/comments')

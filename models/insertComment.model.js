@@ -2,20 +2,24 @@ const db = require('../db/connection')
 const format = require('pg-format')
 
 
-insertNewComment = (newComment) => {
+const insertNewComment = (newComment) => {
 
-    console.log(newComment, "in model")
+    const {votes, author, body, article_id} = newComment
+    console.log(newComment)
 
-    const formattedInputComment = []
-
-
-    const queryString = format(`INSERT INTO comments 
-    (article_id, author, body, votes) 
+    return db.query(`INSERT INTO comments 
+    (body, article_id, author, votes) 
     VALUES 
-    %L
-    RETURNING *`, formattedInputComment)
+    ($1, $2, $3, $4)
+    RETURNING *;`,[body, article_id, author, votes])
 
-    return db.query(queryString)
+    .then((result)=> {
+
+        console.log(result.rows, "rows")
+
+        return result.rows
+    })
+    
 }
 
 

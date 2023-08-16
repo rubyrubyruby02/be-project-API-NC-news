@@ -4,8 +4,6 @@ postNewComment = (request, response, next)=> {
 
     const newComment = request.body
 
-    console.log(newComment, "in controller")
-
     insertNewComment(newComment)
 
     .then((result)=> {
