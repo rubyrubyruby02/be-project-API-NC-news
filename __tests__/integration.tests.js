@@ -562,10 +562,10 @@ describe('Q11 QUERIES GET /api/articles', ()=> {
 describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
     test('Status 200 -can be ordered by Asecnding', ()=> {
         return request(app)
-        .get('/api/articles?sort_by=title')
+        .get('/api/articles?order=asc')
         .expect(200)
         .then((response)=> {
-            expect(response.body.articles).toBeSortedBy('title', {ascending: true})
+            expect(response.body.articles).toBeSortedBy('created_at', {ascending: true})
         })
     })
 })

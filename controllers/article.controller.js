@@ -11,9 +11,9 @@ const getArticle = (request, response, next) => {
 
 const getAllArticles = (request, response, next) => {
 
-    const {topic, sort_by} = request.query
+    const {topic, sort_by, order} = request.query
 
-    fetchAllArticles(topic, sort_by)
+    fetchAllArticles(topic, sort_by, order)
     .then((result)=>{
         response.status(200).send({articles: result})
     })

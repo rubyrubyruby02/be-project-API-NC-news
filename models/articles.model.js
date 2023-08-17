@@ -13,9 +13,11 @@ const fetchArticle = (article_id)=> {
     })
 }
 
-const fetchAllArticles = (topic, sort_by='created_at')=> {
+const fetchAllArticles = (topic, sort_by='created_at', order='desc')=> {
 
     const greenListSortBy = ['title', 'created_at', 'author', 'article_id', 'comment_count', 'topics', 'votes', 'article_img_url']
+
+    const orderGreenList = ['asc', 'desc', 'ascending', 'descending']
 
     const paramsArrayNoSQLInj = []
 
@@ -46,7 +48,14 @@ const fetchAllArticles = (topic, sort_by='created_at')=> {
         })
     }
 
-    baseQueryString+=` ORDER BY a.${sort_by} DESC`
+    if(!orderGreenList.includes(order)){
+        return Promise.reject({
+            status: 400,
+            msg: "Bad request"
+        }) 
+    }
+
+    baseQueryString+=` ORDER BY a.${sort_by} ${order}`
 
     return db.query(baseQueryString, paramsArrayNoSQLInj)
     .then((result)=> {
