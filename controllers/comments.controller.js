@@ -1,5 +1,5 @@
-const { fetchArticle } = require('../models/articles.model')
-const {fetchComments} = require('../models/comments.model')
+const {fetchArticle } = require('../models/articles.model')
+const {fetchComments, removeComment} = require('../models/comments.model')
 
 const getComments = (request, response, next) => {
     const {article_id} = request.params
@@ -20,5 +20,15 @@ const getComments = (request, response, next) => {
     .catch(next)
 }
 
+const deleteComment = (request, response, next) => {
+    
+    const {comment_id} = request.params
+    
+    removeComment(comment_id)
+    .then((result)=> {
+        response.status(204).send({result})
+    })
+}
 
-module.exports = {getComments}
+
+module.exports = {getComments, deleteComment}

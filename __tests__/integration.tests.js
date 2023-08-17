@@ -227,8 +227,6 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
 
             const newComment = response.body.new_comment
 
-            console.log(response.body)
-
             expect(newComment).toHaveProperty('comment_id', 19)
             expect(newComment).toHaveProperty('body', 'Ruby adds a comment to article 1')
             expect(newComment).toHaveProperty('article_id',1)
@@ -320,3 +318,15 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
     })
 })
 
+
+
+describe('Q9 DELETE comment by comment_id', ()=> {
+    test('Status 204: no content when comment has been successfully deleted', ()=> { 
+        return request(app)
+        .delete('/api/comments/4')
+        .expect(204)
+        .then((response)=> {
+            expect(response.body).toEqual({})
+        })
+    })
+})

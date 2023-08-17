@@ -16,5 +16,19 @@ const fetchComments = (article_id) => {
     })
 }
 
+const removeComment = (comment_id) => {
 
-module.exports = {fetchComments}
+    const queryString = `DELETE FROM comments WHERE comment_id = $1`
+    const values = [comment_id]
+
+    return db.query(queryString, values)
+    .then((result)=> {
+        return result.rows
+    })
+    .catch((error)=> {
+        return Promise.reject(error)
+    })
+
+}
+
+module.exports = {fetchComments, removeComment}

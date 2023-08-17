@@ -4,7 +4,7 @@ const app = express()
 const {getTopics} = require('./controllers/topic.controller')
 const {getArticle, getAllArticles} = require('./controllers/article.controller')
 const {getEndpoints} = require('./controllers/endpoints.controller')
-const {getComments} = require('./controllers/comments.controller')
+const {getComments, deleteComment} = require('./controllers/comments.controller')
 const {postNewComment} = require('./controllers/postcomment.controller')
 
 const {customErrorHandler, PSQLErrorHandler} = require('./errors/errors')
@@ -22,6 +22,8 @@ app.get('/api/articles/:article_id/comments', getComments)
 
 app.post('/api/articles/:article_id/comments', postNewComment)
 
+
+app.delete('/api/comments/:comment_id', deleteComment)
 
 app.use((request, response)=> {
     response.status(404).send({msg: "Not found"})
