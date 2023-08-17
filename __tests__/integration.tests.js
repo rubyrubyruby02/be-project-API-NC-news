@@ -15,7 +15,7 @@ afterAll(()=> {
 })
 
 
-describe('Q2 Adds first endpoint /api/topics', ()=> {
+describe('Q2 GET adds first endpoint /api/topics', ()=> {
     test('Status 200: responds with array of objects with properties of slug and description', ()=> {
 
         return request(app)
@@ -40,7 +40,7 @@ describe('Q2 Generic 404 not found error for missing endpoints', ()=> {
         })
     })
 })
-describe('Q3 Endpoint /api returns a list with a description of all available endpoints ', ()=> {
+describe('Q3 GET endpoint /api returns a list with a description of all available endpoints ', ()=> {
     test('Status 200: tests entire file by comparing raw data to returned actual data', ()=> {
 
         return request(app)
@@ -132,7 +132,7 @@ describe('Q4 GET /api/articles/:article_id', ()=> {
     })
 })
 
-describe('Q5  adds /api/articles and returns articles in data-descending order', ()=> {
+describe('Q5 GET adds /api/articles and returns articles in data-descending order', ()=> {
     
     test('Status 200: returns array of article objects with properties of author, title, article_id, topic, created_at, votes, article_img_url, comment_count', ()=> {
         return request(app)
@@ -157,11 +157,12 @@ describe('Q5  adds /api/articles and returns articles in data-descending order',
         .get('/api/articles')
         .expect(200)
         .then(({body : {articles}})=> {
+         
             expect(articles).toBeSortedBy('created_at', {descending: true})
         })
     })
 })
-describe('Q6 /api/articles/:article_id/comments', ()=> {
+describe('Q6 GET /api/articles/:article_id/comments', ()=> {
     test('Status 200: responds with array with following properties: comment_id, votes, created_at, author, body, article_id', ()=> {
         return request(app)
         .get('/api/articles/1/comments')
@@ -210,6 +211,109 @@ describe('Q6 /api/articles/:article_id/comments', ()=> {
         .then((response)=> {
             expect(response.body.comments).toEqual([])
         })
+    })
+})
+describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
+    test('Status 201: returns user input', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body":"Ruby adds a comment to article 1",
+          }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(201)
+        .then((response) => {
+            const newComment = response.body.new_comment
+
+            expect(newComment).toHaveProperty('comment_id', 19)
+            expect(newComment).toHaveProperty('body', 'Ruby adds a comment to article 1')
+            expect(newComment).toHaveProperty('article_id',1)
+            expect(newComment).toHaveProperty('author',  'butter_bridge')
+            expect(newComment).toHaveProperty('votes', 0)
+            expect(newComment).toHaveProperty('created_at', expect.any((String)))
+        })
+    })
+    test('Status 201: handles input with additional unneccesary properties', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body":"Ruby adds a comment to article 1",
+            "other": "other unnecessary input"
+        }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(201)
+        .then((response)=> {
+            const newComment = response.body.new_comment
+            expect(newComment).toHaveProperty('comment_id', expect.any((Number)))
+            expect(newComment).toHaveProperty('body', expect.any((String)))
+            expect(newComment).toHaveProperty('article_id', expect.any((Number)))
+            expect(newComment).toHaveProperty('author', expect.any((String)))
+            expect(newComment).toHaveProperty('votes', expect.any((Number)))
+            expect(newComment).toHaveProperty('created_at', expect.any((String)))
+        })
+    })
+    test('Status 404 : article_id is valid but does not exist', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body":"Ruby adds a comment to article 999",
+          }
+        return request(app)
+        .post('/api/articles/999/comments')
+        .send(postInput)
+        .expect(404)
+        .then((response)=> 
+         expect(response.body.msg).toBe("Not found"))
+    })
+    test('Status 404: username does not exist', ()=> {
+        const postInput = {
+            "username": "Ruby",
+            "body":"Ruby adds a comment to article 1",
+          }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(404)
+        .then((response)=> 
+         expect(response.body.msg).toBe("Not found"))
+    })
+    test('Status 400: user does not give all required fields in input - no body is provided', ()=> {
+        const postInput = {
+            "username": "butter_bridge"
+          }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(400)
+        .then((response)=> 
+         expect(response.body.msg).toBe('Missing input'))
+
+    })
+    test('Status 400: user does not give all required fields in input - no username is provided', ()=> {
+        const postInput = {
+            "body": "here is a body with no username"
+          }
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(postInput)
+        .expect(400)
+        .then((response)=> 
+         expect(response.body.msg).toBe('Missing input'))
+
+    })
+    test('Status 400: article id given is not a number', ()=> {
+        const postInput = {
+            "username": "butter_bridge",
+            "body": "hello this is a new comment"
+          }
+        return request(app)
+        .post('/api/articles/not_a_id_number/comments')
+        .send(postInput)
+        .expect(400)
+        .then((response)=> 
+         expect(response.body.msg).toBe('Bad request'))
+
     })
 })
 describe('Q8 PATCH /api/articles/:article_id', ()=> {
@@ -288,7 +392,7 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
         .send({"a wrong key": 100})
         .expect(400)
         .then((response)=> {
-            expect(response.body.msg).toEqual('Bad request')
+            expect(response.body.msg).toEqual('Missing input')
         })
     })
     test('Status 400 - Bad request - no user input is given', ()=> {
@@ -297,7 +401,7 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
         .send({})
         .expect(400)
         .then((response)=> {
-            expect(response.body.msg).toEqual('Bad request')
+            expect(response.body.msg).toEqual('Missing input')
         })
     })
     test('Status 404: Article id is valid but does not exist', ()=> {

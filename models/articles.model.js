@@ -53,7 +53,6 @@ const updateArticle = (article_id, inc_votes)=> {
                 msg: 'Article Id not found'
             })
         }
-
         return result.rows[0]
     })
     .catch((error)=> {
