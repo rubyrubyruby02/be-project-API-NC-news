@@ -40,17 +40,23 @@ const fetchAllArticles = ()=> {
 
 const updateArticle = (article_id, inc_votes)=> {
 
-    console.log(article_id)
-    console.log(inc_votes)
+    const formattedValues = [inc_votes, article_id]
 
-    const queryString = `UPDATE`
+    const queryString = `UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`
 
-    return db.query()
+    return db.query(queryString, formattedValues)
     .then((result)=> {
+
+        if(result.rows.length === 0){
+            return Promise.reject({
+                status: 404,
+                msg: 'Article Id not found'
+            })
+        }
+
         return result.rows[0]
     })
     .catch((error)=> {
-        console.log(error)
         return Promise.reject(error)
     })
 
