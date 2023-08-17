@@ -429,3 +429,18 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
    
 })
 
+describe('Q10 GET /api/users', ()=> {
+    test('Status 200: returns an array of objects with properties of username, name, avatar_url', ()=> {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then((response)=> {
+            response.body.users.forEach((user)=> {
+                expect(user).toHaveProperty('username', expect.any((String)))
+                expect(user).toHaveProperty('name', expect.any((String)))
+                expect(user).toHaveProperty('avatar_url', expect.any((String)))
+            })
+        })
+    })
+    test('')
+})
