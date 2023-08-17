@@ -13,7 +13,7 @@ const insertNewComment = (article_id, newComment) => {
     ($1, $2, $3)
     RETURNING *;`, formattedValues)
     .then((result)=> {
-        return result.rows
+        return result.rows[0]
     })
     .catch((error)=> {
         return Promise.reject(error)

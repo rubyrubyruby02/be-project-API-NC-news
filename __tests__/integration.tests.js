@@ -227,12 +227,14 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
 
             const newComment = response.body.new_comment
 
-            expect(newComment[0]).toHaveProperty('comment_id', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('body', expect.any((String)))
-            expect(newComment[0]).toHaveProperty('article_id', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('author', expect.any((String)))
-            expect(newComment[0]).toHaveProperty('votes', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('created_at', expect.any((String)))
+            console.log(response.body)
+
+            expect(newComment).toHaveProperty('comment_id', 19)
+            expect(newComment).toHaveProperty('body', 'Ruby adds a comment to article 1')
+            expect(newComment).toHaveProperty('article_id',1)
+            expect(newComment).toHaveProperty('author',  'butter_bridge')
+            expect(newComment).toHaveProperty('votes', 0)
+            expect(newComment).toHaveProperty('created_at', expect.any((String)))
         })
     })
     test('Status 201: handles input with additional unneccesary properties', ()=> {
@@ -241,19 +243,18 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
             "body":"Ruby adds a comment to article 1",
             "other": "other unnecessary input"
         }
-
         return request(app)
         .post('/api/articles/1/comments')
         .send(postInput)
         .expect(201)
         .then((response)=> {
             const newComment = response.body.new_comment
-            expect(newComment[0]).toHaveProperty('comment_id', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('body', expect.any((String)))
-            expect(newComment[0]).toHaveProperty('article_id', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('author', expect.any((String)))
-            expect(newComment[0]).toHaveProperty('votes', expect.any((Number)))
-            expect(newComment[0]).toHaveProperty('created_at', expect.any((String)))
+            expect(newComment).toHaveProperty('comment_id', expect.any((Number)))
+            expect(newComment).toHaveProperty('body', expect.any((String)))
+            expect(newComment).toHaveProperty('article_id', expect.any((Number)))
+            expect(newComment).toHaveProperty('author', expect.any((String)))
+            expect(newComment).toHaveProperty('votes', expect.any((Number)))
+            expect(newComment).toHaveProperty('created_at', expect.any((String)))
         })
     })
     test('Status 404 : article_id is valid but does not exist', ()=> {

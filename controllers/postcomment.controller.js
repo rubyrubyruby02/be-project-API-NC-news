@@ -7,6 +7,7 @@ const postNewComment = (request, response, next)=> {
 
     insertNewComment(article_id, newComment)
     .then((result)=> {
+        
         response.status(201).send({new_comment: result})
     })
     .catch(next)
