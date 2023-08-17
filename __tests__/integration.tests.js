@@ -526,4 +526,46 @@ describe('Q11 QUERIES GET /api/articles', ()=> {
             expect(response.body.articles).toBeSortedBy('title', {descending: true})
         })
     })
+    test('Status 200: sort by any valid column (article_id)', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=article_id')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('article_id', {descending: true})
+        })
+    })
+    test('Status 200: if no column to sort_by is given, defaults to date', ()=> {
+        return request(app)
+        .get('/api/articles?')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('created_at', {coerce: true})
+        })
+    })
+    test('Status 400 if sort_by not a column in database', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=notacolumninDatabase')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })  
+    })
+    test('Status 400 if sort_by is in query but left empty/blank', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })  
+    })
+})
+describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
+    test('Status 200 -can be ordered by Asecnding', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('title', {ascending: true})
+        })
+    })
 })

@@ -15,7 +15,7 @@ const fetchArticle = (article_id)=> {
 
 const fetchAllArticles = (topic, sort_by='created_at')=> {
 
-    const greenListSortBy = ['title', 'created_at', 'author']
+    const greenListSortBy = ['title', 'created_at', 'author', 'article_id', 'comment_count', 'topics', 'votes', 'article_img_url']
 
     const paramsArrayNoSQLInj = []
 
@@ -39,9 +39,14 @@ const fetchAllArticles = (topic, sort_by='created_at')=> {
     
     baseQueryString+=`GROUP BY a.article_id`
 
-    if(greenListSortBy.includes(sort_by)){
-        baseQueryString+=` ORDER BY a.${sort_by} DESC`
+    if(!greenListSortBy.includes(sort_by)){
+        return Promise.reject({
+            status: 400,
+            msg: "Bad request"
+        })
     }
+
+    baseQueryString+=` ORDER BY a.${sort_by} DESC`
 
     return db.query(baseQueryString, paramsArrayNoSQLInj)
     .then((result)=> {
