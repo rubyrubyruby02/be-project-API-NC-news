@@ -317,7 +317,7 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
     })
 })
 describe('Q8 PATCH /api/articles/:article_id', ()=> {
-    test ('Status 202: accepted patch request and returns object with key of inc_votes and number of new votes to be added', ()=> {
+    test ('Status 200: accepted patch request and returns object with key of inc_votes and number of new votes to be added', ()=> {
 
         const patchInput = {
             "inc_votes": 1
@@ -326,7 +326,7 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
         return request(app)
         .patch('/api/articles/4')
         .send(patchInput)
-        .expect(202)
+        .expect(200)
         .then((response)=> {
 
             const updatedArticle = {
@@ -343,11 +343,11 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
             expect(response.body.updatedArticle).toEqual(updatedArticle)
         })
     })
-    test('Status 202: accepted patch that decreases the number of votes', ()=> {
+    test('Status 200: accepted patch that decreases the number of votes', ()=> {
         return request(app)
         .patch('/api/articles/3')
         .send({"inc_votes": -100})
-        .expect(202)
+        .expect(200)
         .then((response)=> {
 
             const updatedArticle = {

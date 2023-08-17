@@ -25,10 +25,9 @@ const patchArticle = (request, response, next)=> {
 
     updateArticle(article_id, inc_votes)
     .then((result)=> {
-        response.status(202).send({updatedArticle: result})
+        response.status(200).send({updatedArticle: result})
     })
     .catch(next)
-
 
 }
 

@@ -55,10 +55,6 @@ const updateArticle = (article_id, inc_votes)=> {
         }
         return result.rows[0]
     })
-    .catch((error)=> {
-        return Promise.reject(error)
-    })
-
 }
 
 module.exports = {fetchArticle, fetchAllArticles, updateArticle}
