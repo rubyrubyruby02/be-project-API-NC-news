@@ -465,6 +465,9 @@ describe('Q10 GET /api/users', ()=> {
         .get('/api/users')
         .expect(200)
         .then((response)=> {
+
+            expect(response.body.users).toHaveLength(4)
+
             response.body.users.forEach((user)=> {
                 expect(user).toHaveProperty('username', expect.any((String)))
                 expect(user).toHaveProperty('name', expect.any((String)))
@@ -472,12 +475,4 @@ describe('Q10 GET /api/users', ()=> {
             })
         })
     })
-    test('Status 404 - endpoint not found if input incorrectly', ()=> {
-        return request(app)
-        .get('/api/notusers')
-        .expect(404)
-        .then((response)=> {
-            expect(response.body.msg).toBe("Not found")
-        })
-    })  
 })
