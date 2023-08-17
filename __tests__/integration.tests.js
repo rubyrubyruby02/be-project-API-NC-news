@@ -428,7 +428,37 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
     })
    
 })
-
+describe('Q9 DELETE comment by comment_id', ()=> {
+    test('Status 204: no content when comment has been successfully deleted', ()=> { 
+        return request(app)
+        .delete('/api/comments/4')
+        .expect(204)
+    })
+    test('Status 400 - bad request when comment_id is not a number', ()=> {
+         return request(app)
+        .delete('/api/comments/not_a_number')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toEqual("Bad request")
+        })
+    })
+    test('Status 404 - not found when comment_id is valid but does not exist', ()=> {
+         return request(app)
+        .delete('/api/comments/9999')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toEqual("Not found")
+        })
+    })
+    test('Status 404 - nout found if /api/notcomments/1 invalid endpoint input i.e. in default error handler in app', ()=> {
+        return request(app)
+        .delete('/api/notcomments/1')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toEqual("Not found")
+        })
+    })
+})
 describe('Q10 GET /api/users', ()=> {
     test('Status 200: returns an array of objects with properties of username, name, avatar_url', ()=> {
         return request(app)

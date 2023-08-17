@@ -24,6 +24,7 @@ const PSQLErrorHandler = ((error, request, response, next) => {
 })
 
 const customErrorHandler = ((error, request, response, next) => {
+
     if(error.status && error.msg){
         response.status(error.status).send({ msg: error.msg})
     }

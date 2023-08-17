@@ -1,7 +1,6 @@
 const db = require('../db/connection')
 
 const fetchArticle = (article_id)=> {
-
     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then((result)=> {
 
@@ -11,7 +10,6 @@ const fetchArticle = (article_id)=> {
                 msg: 'Article Id not found'
             })
         }
-        
         return result.rows[0]
     })
 }
@@ -33,7 +31,6 @@ const fetchAllArticles = ()=> {
     GROUP BY a.article_id
     ORDER BY a.created_at DESC;`)
     .then((result)=> {
-
         return result.rows
     })
 }
