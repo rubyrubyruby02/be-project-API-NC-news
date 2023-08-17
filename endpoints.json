@@ -83,5 +83,16 @@
     "exampleResponse": {
 
     }
+  }, 
+  "GET /api/users": {
+    "description": "gets a list of all users with username, name and avatar_url",
+    "queries": [],
+    "exampleResponse": {
+      "user" : {
+        "username": "lurker",
+        "name": "do_nothing",
+        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+      }
+    }
   }
 }
