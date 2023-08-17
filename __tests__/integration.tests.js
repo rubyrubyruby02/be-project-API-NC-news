@@ -224,10 +224,7 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
         .send(postInput)
         .expect(201)
         .then((response) => {
-
             const newComment = response.body.new_comment
-
-            console.log(response.body)
 
             expect(newComment).toHaveProperty('comment_id', 19)
             expect(newComment).toHaveProperty('body', 'Ruby adds a comment to article 1')
@@ -318,5 +315,117 @@ describe('Q7 POST request /api/articles/:article_id/comments ', ()=> {
          expect(response.body.msg).toBe('Bad request'))
 
     })
+})
+describe('Q8 PATCH /api/articles/:article_id', ()=> {
+    test ('Status 200: accepted patch request and returns object with key of inc_votes and number of new votes to be added', ()=> {
+
+        const patchInput = {
+            "inc_votes": 1
+        }
+
+        return request(app)
+        .patch('/api/articles/4')
+        .send(patchInput)
+        .expect(200)
+        .then((response)=> {
+
+            const updatedArticle = {
+                article_id: 4,
+                title: 'Student SUES Mitch!',
+                topic: 'mitch',
+                author: 'rogersop',
+                body: 'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
+                created_at: "2020-05-06T01:14:00.000Z",
+                votes: 1,
+                article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+              }
+
+            expect(response.body.updatedArticle).toEqual(updatedArticle)
+        })
+    })
+    test('Status 200: accepted patch that decreases the number of votes', ()=> {
+        return request(app)
+        .patch('/api/articles/3')
+        .send({"inc_votes": -100})
+        .expect(200)
+        .then((response)=> {
+
+            const updatedArticle = {
+                article_id: 3,
+                title: 'Eight pug gifs that remind me of mitch',
+                topic: 'mitch',
+                author: 'icellusedkars',
+                body: 'some gifs',
+                created_at: "2020-11-03T09:12:00.000Z",
+                votes: -100,
+                article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+              }
+
+            expect(response.body.updatedArticle).toEqual(updatedArticle)
+         })
+    })
+    test('Status 400: Bad request - does not accept decimal votes e.g. invalid user input', ()=>{
+        return request(app)
+        .patch('/api/articles/3')
+        .send({"inc_votes": 0.5})
+        .expect(400)
+        .then((response)=> {
+
+            expect(response.body.msg).toEqual('Bad request')
+
+        })
+    })
+    test('Status 400: Bad request - user input is not a number', ()=> {
+        return request(app)
+        .patch('/api/articles/3')
+        .send({"inc_votes": "here is a string"})
+        .expect(400)
+        .then((response)=> {
+
+            expect(response.body.msg).toEqual('Bad request')
+
+        })
+    })
+    test('Status 400 - Bad request - user does not input key of inc_votes', ()=> {
+        return request(app)
+        .patch('/api/articles/1')
+        .send({"a wrong key": 100})
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toEqual('Missing input')
+        })
+    })
+    test('Status 400 - Bad request - no user input is given', ()=> {
+        return request(app)
+        .patch('/api/articles/1')
+        .send({})
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toEqual('Missing input')
+        })
+    })
+    test('Status 404: Article id is valid but does not exist', ()=> {
+        return request(app)
+        .patch('/api/articles/1111')
+        .send({"inc_votes": 1})
+        .expect(404)
+        .then((response)=> {
+
+            expect(response.body.msg).toEqual('Article Id not found')
+
+        })
+    })
+    test('Status 400: Bad request - article id is not a number e.g. is a string', () => {
+        return request(app)
+        .patch('/api/articles/here_is_a_string')
+        .send({"inc_votes": 1})
+        .expect(400)
+        .then((response)=> {
+
+            expect(response.body.msg).toEqual('Bad request')
+
+        })
+    })
+   
 })
 
