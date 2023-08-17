@@ -460,3 +460,19 @@ describe('Q9 DELETE comment by comment_id', ()=> {
         })
     })
 })
+
+
+describe('Q11 QUERIES GET /api/articles(queries)', ()=> {
+    test('Status 200 : filters by topic in the query', ()=> {
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toHaveLength(1)
+
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic', 'cats')
+            })
+        })
+    })
+})
