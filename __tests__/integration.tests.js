@@ -430,7 +430,7 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
 })
 
 describe('Q10 GET /api/users', ()=> {
-    test.skip('Status 200: returns an array of objects with properties of username, name, avatar_url', ()=> {
+    test('Status 200: returns an array of objects with properties of username, name, avatar_url', ()=> {
         return request(app)
         .get('/api/users')
         .expect(200)
@@ -442,5 +442,12 @@ describe('Q10 GET /api/users', ()=> {
             })
         })
     })
-    
+    test('Status 404 - endpoint not found if input incorrectly', ()=> {
+        return request(app)
+        .get('/api/notusers')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Not found")
+        })
+    })  
 })
