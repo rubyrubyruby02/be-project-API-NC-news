@@ -428,7 +428,6 @@ describe('Q8 PATCH /api/articles/:article_id', ()=> {
     })
    
 })
-
 describe('Q9 DELETE comment by comment_id', ()=> {
     test('Status 204: no content when comment has been successfully deleted', ()=> { 
         return request(app)
@@ -460,8 +459,23 @@ describe('Q9 DELETE comment by comment_id', ()=> {
         })
     })
 })
+describe('Q10 GET /api/users', ()=> {
+    test('Status 200: returns an array of objects with properties of username, name, avatar_url', ()=> {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then((response)=> {
 
+            expect(response.body.users).toHaveLength(4)
 
+            response.body.users.forEach((user)=> {
+                expect(user).toHaveProperty('username', expect.any((String)))
+                expect(user).toHaveProperty('name', expect.any((String)))
+                expect(user).toHaveProperty('avatar_url', expect.any((String)))
+            })
+        })
+    })
+})
 describe('Q11 QUERIES GET /api/articles(queries)', ()=> {
     test('Status 200 : filters by topic in the query', ()=> {
         return request(app)
@@ -473,6 +487,43 @@ describe('Q11 QUERIES GET /api/articles(queries)', ()=> {
             response.body.articles.forEach((article)=> {
                 expect(article).toHaveProperty('topic', 'cats')
             })
+        })
+    })
+    test('Status 200: when no query for topic, all articles are returned', ()=> {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toHaveLength(13)
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic', expect.any((String)))
+            })
+        })
+    })
+    test('Status 404 - not found - topic does not exist if a valid but non-existant topic is input e.g. ruby instead of mitch', ()=> {
+        return request(app)
+        .get('/api/articles?topic=ruby')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Topic not found")
+        })
+    })
+    test('Status 404 - topic is invalid e.g topic is not a string', ()=> {
+        return request(app)
+        .get('/api/articles?topic=1')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Topic not found")
+        })
+    })
+})
+describe('Q11 QUERIES GET /api/articles', ()=> {
+    test('Status 200: sort by any valid column (title), defaults to date', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('title', {descending: true})
         })
     })
 })

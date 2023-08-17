@@ -13,9 +13,9 @@ const fetchArticle = (article_id)=> {
     })
 }
 
-const fetchAllArticles = (topic)=> {
+const fetchAllArticles = (topic, sort_by='created_at')=> {
 
-    console.log(topic, "in model")
+    const greenListSortBy = ['title', 'created_at', 'author']
 
     const paramsArrayNoSQLInj = []
 
@@ -29,23 +29,30 @@ const fetchAllArticles = (topic)=> {
     a.votes, 
     a.article_img_url
     FROM articles a 
-    INNER JOIN comments c 
+    LEFT JOIN comments c 
     ON a.article_id = c.article_id `
 
     if(topic){
-        console.log("in if block")
         baseQueryString+=`WHERE a.topic = $1 `
         paramsArrayNoSQLInj.push(topic)
     }
+    
+    baseQueryString+=`GROUP BY a.article_id`
 
-    baseQueryString+=`GROUP BY a.article_id
-    ORDER BY a.created_at DESC`
-
-    console.log(baseQueryString)
+    if(greenListSortBy.includes(sort_by)){
+        baseQueryString+=` ORDER BY a.${sort_by} DESC`
+    }
 
     return db.query(baseQueryString, paramsArrayNoSQLInj)
     .then((result)=> {
-        console.log(result.rows)
+
+        if(result.rows.length === 0){
+            return Promise.reject({
+                status: 404,
+                msg: 'Topic not found'
+            })
+        }
+
         return result.rows
     })
 }
