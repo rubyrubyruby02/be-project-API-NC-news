@@ -36,14 +36,10 @@ const deleteComment = (request, response, next) => {
     
     Promise.all(promises)
     .then((resolvedPromises)=> {
-
-        console.log(resolvedPromises, "resolvedPromises")
-
         const deletedcomment = resolvedPromises[0]
-        response.status(204).send({deleteComment})
+        response.status(204).send()
     })
     .catch(next)
 }
-
 
 module.exports = {getComments, postNewComment, deleteComment}

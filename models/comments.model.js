@@ -54,7 +54,6 @@ const removeComment = (comment_id) => {
     const values = [comment_id]
     return db.query(queryString, values)
     .then((result)=> {
-        console.log(result.rows)
         return result.rows
     })
 }
