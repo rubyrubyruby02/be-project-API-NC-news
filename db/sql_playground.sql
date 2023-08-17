@@ -12,5 +12,6 @@ SELECT
           FROM articles a 
           LEFT JOIN comments c 
           ON a.article_id = c.article_id 
+          WHERE a.topic = 'mitch'
           GROUP BY a.article_id 
-          ORDER BY a.title DESC
+          ORDER BY a.article_id ASC

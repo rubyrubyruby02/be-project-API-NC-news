@@ -560,12 +560,30 @@ describe('Q11 QUERIES GET /api/articles', ()=> {
     })
 })
 describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
-    test('Status 200 -can be ordered by Asecnding', ()=> {
+    test('Status 200 -can be ordered by Asecnding, overriding the default on created_at descending', ()=> {
         return request(app)
         .get('/api/articles?order=asc')
         .expect(200)
         .then((response)=> {
             expect(response.body.articles).toBeSortedBy('created_at', {ascending: true})
+        })
+    })
+    test('Status 200 - a column to sort_by and order ASC can be input', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=title&order=asc')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('title', {ascending: true})
+        })
+    })
+    test('Status 200 - can handle a topic, sort_by and order', ()=> {
+        return request(app)
+        .get('/api/articles?topic=mitch&sort_by=article_id&order=asc')
+        .expect(200)
+        .then((response)=> {
+
+            expect(response.body.articles).toHaveLength(12)
+            expect(response.body.articles).toBeSortedBy('article_id', {ascending: true})
         })
     })
 })
