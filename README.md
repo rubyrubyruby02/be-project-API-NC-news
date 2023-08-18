@@ -1,10 +1,11 @@
 # Northcoders News API
 
 Please find a link to the hosted version:
+https://rubys-northcoders-news.onrender.com
 
 ### Project Summary ###
 This is a back-end project using the Model-View-Controller architecture written using TDD. I have created endpoints to get data from a SQL server. It includes get, post, patch and delete requests. It also includes queries so the user can find specific topics and order the data.
-To see a list of all available endpoints use /api. 
+To see a list of all available endpoints use https://rubys-northcoders-news.onrender.com/api. 
 
 ### Set-up ###
 To run this project yourself, please git clone by using the green Code button.You will also need to install dependancies (npm install).
