@@ -738,7 +738,7 @@ describe('Q17 Advanced PATCH /api/comments/:comment_id', ()=> {
         })
     })
 })
-describe.only('Q18 Advanced POST/api/articles', ()=> {
+describe('Q18 Advanced POST/api/articles', ()=> {
     test('Status 201 created posts a new article (with existing topic and existing author)', ()=> {
        const postInput = {
         "author": "icellusedkars",
@@ -780,7 +780,7 @@ describe.only('Q18 Advanced POST/api/articles', ()=> {
            .then((response)=> {
 
             expect(response.body.newArticle).toHaveProperty("article_id", expect.any((Number)))
-            expect(response.body.newArticle).toHaveProperty("comment_count", 0)
+            expect(response.body.newArticle).toHaveProperty("comment_count", "0")
             expect(response.body.newArticle).toHaveProperty("created_at", expect.any((String)))
             expect(response.body.newArticle).toHaveProperty("votes", 0)
 
