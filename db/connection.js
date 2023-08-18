@@ -11,7 +11,7 @@ if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
 }
 
 const config = {
-  password: 'password'
+  password: process.env.PSQLPass
 }
 
 if(ENV === 'production'){
