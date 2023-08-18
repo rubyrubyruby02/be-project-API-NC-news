@@ -625,7 +625,7 @@ describe('Q12 QUERY GET /api/articles/:article_id (comment count)', ()=> {
     })
    
 })
-describe.only('Q16 GET /api/users/:username', ()=> {
+describe('Q16 GET /api/users/:username', ()=> {
     test('Status 200 returns a user when given a username', ()=> {
 
         return request(app)
