@@ -624,5 +624,35 @@ describe('Q12 QUERY GET /api/articles/:article_id (comment count)', ()=> {
         })
     })
    
+})
+describe('Q16 GET /api/users/:username', ()=> {
+    test('Status 200 returns a user when given a username', ()=> {
 
+        return request(app)
+        .get('/api/users/butter_bridge')
+        .expect(200)
+        .then((response)=> {
+
+            expect(response.body.user).toHaveProperty('username', 'butter_bridge')
+            expect(response.body.user).toHaveProperty('name', 'jonny')
+            expect(response.body.user).toHaveProperty('avatar_url', 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg')
+        })
+
+    })
+    test('Status 404 not found - a valid username but that is not in the system', ()=> {
+        return request(app)
+        .get('/api/users/not_yet_a_user')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Username not found")
+        })
+    })
+    test.only('Status 404 - username is not a string', ()=> {
+        return request(app)
+        .get('/api/users/1')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Username not found")
+        })
+    })
 })
