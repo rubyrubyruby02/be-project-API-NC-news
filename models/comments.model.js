@@ -15,6 +15,13 @@ const fetchComments = (article_id) => {
     })
 }
 
+const updateComment = (comment_id, inc_votes) => {
+    return db.query(`UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *`, [inc_votes, comment_id])
+    .then((result)=> {
+        return result.rows[0]
+    })
+
+}
 
 const insertNewComment = (article_id, newComment) => {
     const {username, body} = newComment
@@ -58,4 +65,4 @@ const removeComment = (comment_id) => {
     })
 }
 
-module.exports = {fetchComments, insertNewComment, removeComment, checkCommentIdExists}
+module.exports = {fetchComments, updateComment, insertNewComment, removeComment, checkCommentIdExists}

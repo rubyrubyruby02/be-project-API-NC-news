@@ -94,5 +94,30 @@
         "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
       }
     }
+  },
+  "GET /api/users/:username": {
+    "description": "gets information for an individual username",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+          "username": "jessjelly",
+          "name": "Jess Jelly",
+          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141"
+      }
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "updates the number of votes a comment has (up & down vote)",
+    "queries": [],
+    "exampleResponse": {
+      "updatedComment": {
+        "comment_id": 2,
+        "body": "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+        "article_id": 1,
+        "author": "butter_bridge",
+        "votes": 4,
+        "created_at": "2020-10-31T03:03:00.000Z"
+      }
+    }
   }
 }

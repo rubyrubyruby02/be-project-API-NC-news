@@ -4,7 +4,7 @@ const app = express()
 const {getTopics} = require('./controllers/topic.controller')
 const {getArticle, getAllArticles, patchArticle} = require('./controllers/article.controller')
 const {getEndpoints} = require('./controllers/endpoints.controller')
-const {getComments, postNewComment, deleteComment} = require('./controllers/comments.controller')
+const {getComments, patchComment, postNewComment, deleteComment} = require('./controllers/comments.controller')
 const {getUsers, getUsersByUsername} = require('./controllers/users.controller')
 
 const {customErrorHandler, PSQLErrorHandler} = require('./errors/errors')
@@ -22,7 +22,9 @@ app.get('/api/articles', getAllArticles)
 app.get('/api/articles/:article_id/comments', getComments)
 
 app.post('/api/articles/:article_id/comments', postNewComment)
+
 app.patch('/api/articles/:article_id', patchArticle)
+app.patch('/api/comments/:comment_id', patchComment)
 
 app.delete('/api/comments/:comment_id', deleteComment)
 
