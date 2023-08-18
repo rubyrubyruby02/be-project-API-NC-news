@@ -5,11 +5,12 @@ https://rubys-northcoders-news.onrender.com/api
 
 ### Project Summary ###
 This is a back-end project using the Model-View-Controller architecture written using TDD. I have created endpoints to get data from a SQL server. It includes get, post, patch and delete requests.
-To see a list of all available endpoints use https://rubys-northcoders-news.onrender.com/api. 
+To see a list of all available endpoint: 
+* https://rubys-northcoders-news.onrender.com/api. 
 
-It also includes queries so the user can find specific topics, sort and order the data.
-https://rubys-northcoders-news.onrender.com/api/articles?topics=cooking
-https://rubys-northcoders-news.onrender.com/api/articles?topics=football&sort_by=article_id&order=asc
+It also includes queries so the user can find specific topics, sort and order the data: 
+* https://rubys-northcoders-news.onrender.com/api/articles?topics=cooking
+* https://rubys-northcoders-news.onrender.com/api/articles?topics=football&sort_by=article_id&order=asc
 
 ### Set-up ###
 To run this project yourself, please git clone by using the green Code button.You will also need to install dependancies (npm install).
