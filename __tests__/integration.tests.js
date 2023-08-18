@@ -539,6 +539,7 @@ describe('Q11 QUERIES GET /api/articles', ()=> {
         })  
     })
 })
+
 describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
     test('Status 200 -can be ordered by Asecnding, overriding the default on created_at descending', ()=> {
         return request(app)
@@ -589,8 +590,7 @@ describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
             expect(response.body.msg).toBe("Bad request")
         })
     })
-=======
-
+})
 
 describe('Q12 QUERY GET /api/articles/:article_id (comment count)', ()=> {
     test('Status 200: returns article object including new property of comment_count', ()=> {
