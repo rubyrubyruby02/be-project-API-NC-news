@@ -1,7 +1,26 @@
 const db = require('../db/connection')
 
 const fetchArticle = (article_id)=> {
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+
+    let baseQuery = `SELECT 
+    a.article_id,
+    COUNT(c.comment_id) comment_count,
+    a.author, 
+    a.title,  
+    a.topic, 
+    a.created_at,
+    a.body, 
+    a.votes, 
+    a.article_img_url
+    FROM articles a 
+    LEFT JOIN comments c 
+    ON a.article_id = c.article_id `
+
+    baseQuery += `WHERE a.article_id = $1 `
+
+    baseQuery += `GROUP BY a.article_id;`
+
+    return db.query(baseQuery, [article_id])
     .then((result)=> {
         if(result.rows.length === 0){
             return Promise.reject({
