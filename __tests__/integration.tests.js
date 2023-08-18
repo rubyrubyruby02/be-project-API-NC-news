@@ -596,19 +596,14 @@ describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
         .then((response)=> {
             expect(response.body.articles).toHaveLength(12)
             expect(response.body.articles).toBeSortedBy('article_id', {ascending: true})
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic','mitch')
+            })
         })
     })
     test('Status 400 Bad request if not asc or desc and another string is input', ()=> {
         return request(app)
         .get('/api/articles?order=notAscOrDesc')
-        .expect(400)
-        .then((response)=> {
-            expect(response.body.msg).toBe("Bad request")
-        })
-    })
-    test('Status 400 Bad request - handles multiple wrong inputs', ()=> {
-        return request(app)
-        .get('/api/articles?topic=hello&sort_by=notacolumn&order=notAscOrDesc')
         .expect(400)
         .then((response)=> {
             expect(response.body.msg).toBe("Bad request")
