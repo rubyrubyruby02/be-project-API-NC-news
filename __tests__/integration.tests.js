@@ -456,6 +456,141 @@ describe('Q10 GET /api/users', ()=> {
     })
 })
 
+describe('Q11 QUERIES GET /api/articles(queries)', ()=> {
+    test('Status 200 : filters by topic in the query', ()=> {
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toHaveLength(1)
+
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic', 'cats')
+            })
+        })
+    })
+    test('Status 200: when no query for topic, all articles are returned', ()=> {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toHaveLength(13)
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic', expect.any((String)))
+            })
+        })
+    })
+    test('Status 404 - not found - topic does not exist if a valid but non-existant topic is input e.g. ruby instead of mitch', ()=> {
+        return request(app)
+        .get('/api/articles?topic=ruby')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Topic not found")
+        })
+    })
+    test('Status 404 - topic is invalid e.g topic is not a string', ()=> {
+        return request(app)
+        .get('/api/articles?topic=1')
+        .expect(404)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Topic not found")
+        })
+    })
+})
+describe('Q11 QUERIES GET /api/articles', ()=> {
+    test('Status 200: sort by any valid column (title), defaults to date', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('title', {descending: true})
+        })
+    })
+    test('Status 200: sort by any valid column (article_id)', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=article_id')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('article_id', {descending: true})
+        })
+    })
+    test('Status 200: if no column to sort_by is given, defaults to date', ()=> {
+        return request(app)
+        .get('/api/articles?')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('created_at', {coerce: true})
+        })
+    })
+    test('Status 400 if sort_by not a column in database', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=notacolumninDatabase')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })  
+    })
+    test('Status 400 if sort_by is in query but left empty/blank', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })  
+    })
+})
+describe('Q11 QUERIES GET /api/articles Ascending & Descending', ()=> {
+    test('Status 200 -can be ordered by Asecnding, overriding the default on created_at descending', ()=> {
+        return request(app)
+        .get('/api/articles?order=asc')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('created_at', {ascending: true})
+        })
+    })
+    test('Status 200 - a column & order ASC can be input', ()=> {
+        return request(app)
+        .get('/api/articles?sort_by=title&order=asc')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toBeSortedBy('title', {ascending: true})
+        })
+    })
+    test('Status 200 - topic & order ASC can be input', ()=> {
+        return request(app)
+        .get('/api/articles?topic=mitch&order=asc')
+        .expect(200)
+        .then((response)=> {
+           
+            expect(response.body.articles).toBeSortedBy('created_at', {ascending: true})
+
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic','mitch')
+            })
+        })
+    })
+    test('Status 200 - all 3 - can handle a topic, sort_by and order', ()=> {
+        return request(app)
+        .get('/api/articles?topic=mitch&sort_by=article_id&order=asc')
+        .expect(200)
+        .then((response)=> {
+            expect(response.body.articles).toHaveLength(12)
+            expect(response.body.articles).toBeSortedBy('article_id', {ascending: true})
+            response.body.articles.forEach((article)=> {
+                expect(article).toHaveProperty('topic','mitch')
+            })
+        })
+    })
+    test('Status 400 Bad request if not asc or desc and another string is input', ()=> {
+        return request(app)
+        .get('/api/articles?order=notAscOrDesc')
+        .expect(400)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })
+    })
+=======
+
 
 describe('Q12 QUERY GET /api/articles/:article_id (comment count)', ()=> {
     test('Status 200: returns article object including new property of comment_count', ()=> {
@@ -489,4 +624,5 @@ describe('Q12 QUERY GET /api/articles/:article_id (comment count)', ()=> {
         })
     })
    
+
 })
