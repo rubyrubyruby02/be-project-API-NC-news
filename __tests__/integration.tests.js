@@ -647,12 +647,94 @@ describe('Q16 GET /api/users/:username', ()=> {
             expect(response.body.msg).toBe("Username not found")
         })
     })
-    test.only('Status 404 - username is not a string', ()=> {
+    test('Status 404 - username is not a string', ()=> {
         return request(app)
         .get('/api/users/1')
         .expect(404)
         .then((response)=> {
             expect(response.body.msg).toBe("Username not found")
+        })
+    })
+})
+describe('Q17 Advanced PATCH /api/comments/:comment_id', ()=> {
+    test('Status 200 increase the number votes on a comment when given the comment_id', ()=> {
+        
+        const patchInput = {
+            "inc_votes": 1
+        }
+        
+        return request(app)
+        .patch('/api/comments/2')
+        .send(patchInput)
+        .then((response)=> {
+
+            const updatedComment = {
+                comment_id: 2,
+                body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+                article_id: 1,
+                author: "butter_bridge",
+                votes: 15,
+                created_at: "2020-10-31T03:03:00.000Z"
+
+            }
+
+            expect(response.body.updatedComment).toEqual(updatedComment)
+        })
+    })
+    test('Status 200 decreases the number votes on a comment when given the comment_id', ()=> {
+        
+        const patchInput = {
+            "inc_votes": -10
+        }
+        
+        return request(app)
+        .patch('/api/comments/2')
+        .send(patchInput)
+        .then((response)=> {
+
+            const updatedComment = {
+                comment_id: 2,
+                body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+                article_id: 1,
+                author: "butter_bridge",
+                votes: 4,
+                created_at: "2020-10-31T03:03:00.000Z"
+            }
+
+            expect(response.body.updatedComment).toEqual(updatedComment)
+        })
+    })
+    test('Status 404 - valid comment id but that does not exist', ()=> {
+        const patchInput = {
+            "inc_votes": 10
+        }
+        
+        return request(app)
+        .patch('/api/comments/9999')
+        .send(patchInput)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Not found")
+        })
+
+    })
+    test('Status 400: Bad request user input is not a number', ()=> {
+        const patchInput = {
+            "inc_votes": "not a number here"
+        }
+        return request(app)
+        .patch('/api/comments/9')
+        .send(patchInput)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Bad request")
+        })
+    })
+    test('Status 400 Bad request missing user input / user input is empty', ()=> {
+        const patchInput = {}
+        return request(app)
+        .patch('/api/comments/9')
+        .send(patchInput)
+        .then((response)=> {
+            expect(response.body.msg).toBe("Missing input")
         })
     })
 })
