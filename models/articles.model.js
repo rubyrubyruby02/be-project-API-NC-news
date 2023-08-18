@@ -106,4 +106,36 @@ const updateArticle = (article_id, inc_votes)=> {
     })
 }
 
-module.exports = {fetchArticle, fetchAllArticles, updateArticle}
+const addNewArticle = (newArticle) => {
+    const {author, title, body, topic, article_img_url} = newArticle
+
+    const baseQueryString = 
+    `INSERT INTO articles 
+    (author, title, body, topic, article_img_url) 
+    VALUES
+    ($1, $2, $3, $4, $5)
+    RETURNING article_id`
+
+
+    return db.query(baseQueryString, [author, title, body, topic, article_img_url])
+   
+    .then((result)=> {
+
+        const insertedArticle = result.rows[0].article_id
+
+        const selectQueryString = `SELECT a.*, COUNT(c.comment_id) comment_count
+        FROM articles a
+        LEFT JOIN comments c
+        ON a.article_id = c.article_id
+        WHERE a.article_id = $1
+        GROUP BY a.article_id`
+
+
+        return db.query(selectQueryString, [insertedArticle])
+        .then((selectresult)=> {
+            return selectresult.rows[0]
+        })
+    })
+}
+
+module.exports = {fetchArticle, fetchAllArticles, updateArticle, addNewArticle}

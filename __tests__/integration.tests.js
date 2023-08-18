@@ -738,3 +738,52 @@ describe('Q17 Advanced PATCH /api/comments/:comment_id', ()=> {
         })
     })
 })
+describe.only('Q18 Advanced POST/api/articles', ()=> {
+    test('Status 201 created posts a new article (with existing topic and existing author)', ()=> {
+       const postInput = {
+        "author": "icellusedkars",
+        "title": "A novel by Ruby",
+        "body": "Here is a novel about Ruby learning to code",
+        "topic": "cats",
+        "article_img_url": "https://cdn.pixabay.com/photo/2018/01/11/23/16/woman-3077180_1280.jpg"
+       } 
+
+       return request(app)
+       .post('/api/articles')
+       .send(postInput)
+       .expect(201)
+       .then((response)=> {
+        
+        expect(response.body.newArticle).toHaveProperty('author', "icellusedkars")
+        expect(response.body.newArticle).toHaveProperty('title', "A novel by Ruby")
+        expect(response.body.newArticle).toHaveProperty('body', "Here is a novel about Ruby learning to code")
+        expect(response.body.newArticle).toHaveProperty('topic', "cats")
+        expect(response.body.newArticle).toHaveProperty('article_img_url', "https://cdn.pixabay.com/photo/2018/01/11/23/16/woman-3077180_1280.jpg")
+
+
+       })
+    })
+    test('Status 201 response to user also had article_id, votes, created_at and comment count', ()=> {
+        
+        const postInput = {
+            "author": "icellusedkars",
+            "title": "A second novel by Ruby",
+            "body": "Here is another novel about Ruby and her cats",
+            "topic": "cats",
+            "article_img_url": "https://cdn.pixabay.com/photo/2018/01/11/23/16/woman-3077180_1280.jpg"
+           } 
+    
+           return request(app)
+           .post('/api/articles')
+           .send(postInput)
+           .expect(201)
+           .then((response)=> {
+
+            expect(response.body.newArticle).toHaveProperty("article_id", expect.any((Number)))
+            expect(response.body.newArticle).toHaveProperty("comment_count", 0)
+            expect(response.body.newArticle).toHaveProperty("created_at", expect.any((String)))
+            expect(response.body.newArticle).toHaveProperty("votes", 0)
+
+           })
+    })
+})

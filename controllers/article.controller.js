@@ -1,4 +1,4 @@
-const {fetchArticle, fetchAllArticles, updateArticle} = require('../models/articles.model')
+const {fetchArticle, fetchAllArticles, updateArticle, addNewArticle} = require('../models/articles.model')
 
 const getArticle = (request, response, next) => {
     const {article_id} = request.params
@@ -21,11 +21,9 @@ const getAllArticles = (request, response, next) => {
 }
 
 
-const patchArticle = (request, response, next)=> {
-    
+const patchArticle = (request, response, next)=> {  
     const {inc_votes} = request.body
     const {article_id} = request.params
-
     updateArticle(article_id, inc_votes)
     .then((result)=> {
         response.status(200).send({updatedArticle: result})
@@ -34,4 +32,15 @@ const patchArticle = (request, response, next)=> {
 
 }
 
-module.exports = {getArticle, getAllArticles, patchArticle}
+const postNewArticle = (request, response, next) => {
+
+    const newArticle = request.body
+
+    addNewArticle(newArticle)
+    .then((result)=> {
+        response.status(201).send({newArticle: result})
+    })
+
+}
+
+module.exports = {getArticle, getAllArticles, patchArticle, postNewArticle}
