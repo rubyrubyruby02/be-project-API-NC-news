@@ -2,6 +2,7 @@ const {fetchUsers, fetchUserByUsername} = require('../models/users.model')
 
 const getUsers = (request, response, next) => {
 
+
     fetchUsers()
     .then((result)=> {
         response.status(200).send({users: result})
@@ -11,6 +12,7 @@ const getUsers = (request, response, next) => {
 
 
 const getUsersByUsername = (request, response, next) => {
+
     const {username} = request.params
 
     fetchUserByUsername(username)

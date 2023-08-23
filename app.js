@@ -5,14 +5,19 @@ const {getTopics} = require('./controllers/topic.controller')
 const {getArticle, getAllArticles, patchArticle} = require('./controllers/article.controller')
 const {getEndpoints} = require('./controllers/endpoints.controller')
 const {getComments, patchComment, postNewComment, deleteComment} = require('./controllers/comments.controller')
-const {getUsers, getUsersByUsername} = require('./controllers/users.controller')
+
+
+const usersRouter = require("./routes/user-routes")
 
 const {customErrorHandler, PSQLErrorHandler} = require('./errors/errors')
 
 app.use(express.json())
 
-app.get('/api/users', getUsers)
-app.get('/api/users/:username', getUsersByUsername)
+
+app.use('/api/users', usersRouter)
+
+
+
 app.get('/api', getEndpoints)
 
 
