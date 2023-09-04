@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express')
 const app = express()
 
@@ -6,9 +7,9 @@ const {getArticle, getAllArticles, patchArticle} = require('./controllers/articl
 const {getEndpoints} = require('./controllers/endpoints.controller')
 const {getComments, patchComment, postNewComment, deleteComment} = require('./controllers/comments.controller')
 const {getUsers, getUsersByUsername} = require('./controllers/users.controller')
-
 const {customErrorHandler, PSQLErrorHandler} = require('./errors/errors')
 
+app.use(cors());
 app.use(express.json())
 
 app.get('/api/users', getUsers)
